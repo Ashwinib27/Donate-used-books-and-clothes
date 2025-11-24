@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Donate Used Books & Clothes</title>
+  <style>
+    :root{--brand:#2b6cb0;--panel:#f8f8f8}
+    html,body{height:100%}
+    body{font-family:Arial,Helvetica,sans-serif;margin:0;color:#222;line-height:1.4;background:#fff}
+    .wrap{max-width:980px;margin:0 auto;padding:16px}
+    nav{background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:4px}
+    nav a{color:#fff;text-decoration:none;margin-left:12px}
+    .hero{background:#ebf8ff;padding:36px 16px;border-radius:6px;text-align:center}
+    .btn{display:inline-block;background:var(--brand);color:#fff;padding:10px 14px;border-radius:6px;text-decoration:none;border:none;cursor:pointer;font-size:14px}
+    .grid{display:flex;gap:16px;flex-wrap:wrap}
+    .card{background:var(--panel);padding:16px;border-radius:8px;flex:1;min-width:220px}
+    form{max-width:780px;margin-top:12px}
+    .form-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+    label{display:block;font-size:14px;margin-bottom:6px}
+    input[type="text"],input[type="email"],textarea{width:100%;padding:8px;border:1px solid #ccc;border-radius:6px;font-size:14px;box-sizing:border-box}
+    textarea{min-height:80px;resize:vertical}
+    #donationList{margin-top:12px}
+    #bottle{display:block;margin:18px auto;max-width:280px;cursor:pointer}
+    #chatbox{position:fixed;right:20px;bottom:20px;width:320px;background:#fff;border:2px solid var(--brand);border-radius:10px;padding:10px;box-shadow:0 8px 20px rgba(0,0,0,.12);display:none}
+    #messages{height:190px;overflow:auto;border:1px solid #ddd;padding:8px;border-radius:6px;font-size:14px;background:#fafafa}
+    #userInput{width:100%;height:48px;margin-top:8px;padding:8px;box-sizing:border-box}
+    footer{background:var(--brand);color:#fff;text-align:center;padding:14px;border-radius:6px;margin-top:18px}
+    .muted{color:#666;font-size:13px}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <nav aria-label="Main navigation">
+        <div><strong>Donate &amp; Share</strong></div>
+        <div>
+          <a href="#home">Home</a>
+          <a href="#types">What to Donate</a>
+          <a href="#donate">Donate Item</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section id="home" class="hero" aria-labelledby="hero-title">
+        <h1 id="hero-title">Give a Second Life to Your Books &amp; Clothes</h1>
+        <p class="muted">Your old items can bring happiness to someone in need.</p>
+        <button id="donateNow" class="btn" type="button">Donate Now</button>
+      </section>
+
+      <section id="types" aria-labelledby="types-title" style="margin-top:18px">
+        <h2 id="types-title">Items You Can Donate</h2>
+        <div class="grid" role="list">
+          <article class="card" role="listitem">
+            <h3>Books</h3>
+            <p class="muted">School books, novels, study guides, story books</p>
+          </article>
+          <article class="card" role="listitem">
+            <h3>Clothes</h3>
+            <p class="muted">Kids wear, men's wear, women's wear — clean &amp; usable</p>
+          </article>
+          <article class="card" role="listitem">
+            <h3>Stationery</h3>
+            <p class="muted">Notebooks, pens, pencils, school bags</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="donate" style="margin-top:22px">
+        <h2>Donate Your Item</h2>
+
+        <form id="donationForm" action="donation.php" method="POST">
+          <div class="form-row" style="width:100%">
+            <div style="flex:1;min-width:180px">
+              <label for="donorName">Your name</label>
+              <input id="donorName" name="name" type="text" required autocomplete="name" />
+            </div>
+            <div style="width:220px;min-width:140px">
+              <label for="donorPhone">Phone</label>
+              <input id="donorPhone" name="phone" type="text" required inputmode="tel" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div style="flex:1;min-width:180px">
+              <label for="donorItem">Item to donate</label>
+              <input id="donorItem" name="item" type="text" required />
+            </div>
+            <div style="width:220px;min-width:140px">
+              <label for="donorEmail">Email</label>
+              <input id="donorEmail" name="email" type="email" required autocomplete="email" />
+            </div>
+          </div>
+
+          <div>
+            <label for="donorAddress">Pickup address</label>
+            <textarea id="donorAddress" name="address" required></textarea>
+          </div>
+
+          <div style="margin-top:10px">
+            <button id="submitDonation" type="submit" class="btn">Submit Donation</button>
+          </div>
+        </form>
+
+        <div id="donationList" aria-live="polite"></div>
+      </section>
+
+      <img id="bottle" src="data:image/jpeg;base64,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" alt="Decorative bottle — click to open helper" />
+
+      <div id="chatbox" aria-hidden="true" role="dialog" aria-label="Donation helper chat">
+        <div id="messages">🤫 You found the secret helper! Click the bottle again to close.</div>
+        <textarea id="userInput" placeholder="Type here..." aria-label="Message input"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="sendBtn" class="btn" type="button">Send</button>
+          <button id="clearBtn" type="button">Clear</button>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <small>© 2025 Donate &amp; Share | Helping the community</small>
+    </footer>
+  </div>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // state
+    const groupMembers = ["Anvita","Ananya","Inchara","Ashwini"];
+    let userName = localStorage.getItem('ds_userName') || '';
+
+    // elements
+    const donateNowBtn = document.getElementById('donateNow');
+    const bottle = document.getElementById('bottle');
+    const chatbox = document.getElementById('chatbox');
+    const messages = document.getElementById('messages');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const donationForm = document.getElementById('donationForm');
+    const donationList = document.getElementById('donationList');
+
+    // helpers
+    function appendMessage(text) {
+      const d = document.createElement('div');
+      d.style.margin = '6px 0';
+      d.innerHTML = text;
+      messages.appendChild(d);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function safeSpeak(text) {
+      if (typeof window.speechSynthesis !== 'undefined') {
+        try {
+          const u = new SpeechSynthesisUtterance(text);
+          window.speechSynthesis.speak(u);
+        } catch (err) {
+          console.warn('speech error', err);
+        }
+      }
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, function (m) {
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+      });
+    }
+
+    // donate now scroll
+    donateNowBtn.addEventListener('click', function () {
+      document.getElementById('donate').scrollIntoView({behavior: 'smooth'});
+    });
+
+    // bottle toggle
+    bottle.addEventListener('click', function () {
+      const isOpen = chatbox.style.display === 'block';
+      chatbox.style.display = isOpen ? 'none' : 'block';
+      chatbox.setAttribute('aria-hidden', String(isOpen));
+      if (!isOpen) {
+        if (!userName) {
+          appendMessage('🤖 Bot: Hello! What should I call you?');
+          safeSpeak('Hello! What should I call you?');
+        } else {
+          appendMessage('🤖 Bot: Welcome back, ' + escapeHtml(userName) + '!');
+          safeSpeak('Welcome back ' + userName);
+        }
+      }
+    });
+
+    // simple bot actions
+    sendBtn.addEventListener('click', onSend);
+    userInput.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); onSend(); }
+    });
+    clearBtn.addEventListener('click', function () { userInput.value = ''; });
+
+    function onSend() {
+      const text = userInput.value.trim();
+      if (!text) return;
+      appendMessage('🧑 You: ' + escapeHtml(text));
+      userInput.value = '';
+      appendMessage('🤖 Bot: ...');
+      setTimeout(async function () {
+        const reply = await botReply(text);
+        // replace last "..."
+        const nodes = messages.childNodes;
+        for (let i = nodes.length - 1; i >= 0; i--) {
+          if (nodes[i].textContent && nodes[i].textContent.indexOf('🤖 Bot: ...') !== -1) {
+            nodes[i].innerHTML = '🤖 Bot: ' + escapeHtml(reply);
+            break;
+          }
+        }
+        messages.scrollTop = messages.scrollHeight;
+        safeSpeak(reply);
+      }, 300);
+    }
+
+    async function botReply(prompt) {
+      const p = (prompt || '').trim();
+      const low = p.toLowerCase();
+      if (!userName) {
+        const candidate = p.split(/\s+/)[0] || 'Guest';
+        userName = candidate.charAt(0).toUpperCase() + candidate.slice(1).toLowerCase();
+        try { localStorage.setItem('ds_userName', userName); } catch (e) { /* ignore */ }
+        if (groupMembers.includes(userName)) {
+          return 'Welcome, ' + userName + '! You are a group member.';
+        }
+        return 'Nice to meet you, ' + userName + '! Ask me anything about donations.';
+      }
+      if (low.includes('hello') || low.includes('hi')) return 'Hello ' + userName + '! How can I help you today?';
+      if (low.includes('donate')) return userName + ', please use the donation form on this page to submit item details.';
+      if (low.includes('book')) return userName + ', we accept textbooks, storybooks and novels.';
+      if (low.includes('cloth') || low.includes('clothe')) return userName + ', ensure clothes are clean and usable.';
+      if (low.includes('thanks') || low.includes('thank')) return 'You\'re welcome, ' + userName + '!';
+      if (low.includes('bye')) return 'Goodbye ' + userName + '!';
+      if (groupMembers.map(x=>x.toLowerCase()).includes(low)) return p + ' is one of our group members.';
+      return 'I\'m the donation helper, ' + userName + '. Ask about donating books, clothes, or pickup.';
+    }
+
+    
+
+    // report runtime errors to console for debugging
+    window.addEventListener('error', function (ev) {
+      console.error('Runtime error:', ev.message || ev.error);
+    });
+  })();
+  </script>
+</body>
+</html>
